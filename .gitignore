@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+.next/
+dist/
+build/
+*.js.map
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# PHP
+/qloapps/var/cache/
+/qloapps/var/logs/
+/qloapps/img/
+/qloapps/download/
+/qloapps/upload/
+/qloapps/config/settings.inc.php
+
+# Docker
+.docker/
+
+# Terraform state
+infra/**/*.tfstate
+infra/**/*.tfstate.backup
+infra/**/.terraform/
