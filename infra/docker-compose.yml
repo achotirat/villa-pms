@@ -1,0 +1,50 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: villa-pms-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: qloapps
+      MYSQL_USER: qloapps
+      MYSQL_PASSWORD: qloapps
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qloapps:
+    image: php:8.1-apache
+    container_name: villa-pms-qloapps
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_SERVER: mysql
+      DB_NAME: qloapps
+      DB_USER: qloapps
+      DB_PASSWD: qloapps
+      DB_PREFIX: ps_
+    volumes:
+      - ../qloapps:/var/www/html
+      - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    ports:
+      - "8080:80"
+    working_dir: /var/www/html
+
+  redis:
+    image: redis:7-alpine
+    container_name: villa-pms-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql_data:
